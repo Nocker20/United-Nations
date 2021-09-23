@@ -1,2 +1,4 @@
 this has number
 1
+this file has
+2 now
