@@ -16,11 +16,11 @@ import engine.DrawManager.SpriteType;
 public class Ship extends Entity {
 
 	/** Time between shots. */
-	private static final int SHOOTING_INTERVAL = 750;
+	private static int SHOOTING_INTERVAL = 750;
 	/** Speed of the bullets shot by the ship. */
 	private static final int BULLET_SPEED = -6;
 	/** Movement of the ship for each unit of time. */
-	private static final int SPEED = 2;
+	private static  int SPEED = 2;
 	
 	/** Minimum time between shots. */
 	private Cooldown shootingCooldown;
@@ -109,5 +109,16 @@ public class Ship extends Entity {
 	 */
 	public final int getSpeed() {
 		return SPEED;
+	}
+
+	public final void setSpeed() {
+		this.SPEED = 10;
+
+	}
+	//functions , set the shootingcooldown
+	public final void setShootingCooldown(){
+		this.SHOOTING_INTERVAL = 100;
+		this.shootingCooldown = Core.getCooldown(SHOOTING_INTERVAL);
+
 	}
 }

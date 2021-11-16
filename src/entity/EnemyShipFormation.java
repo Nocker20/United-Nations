@@ -333,6 +333,7 @@ public class EnemyShipFormation implements Iterable<EnemyShip> {
 	public final void shoot(final Set<Bullet> bullets) {
 		// For now, only ships in the bottom row are able to shoot.
 		int index = (int) (Math.random() * this.shooters.size());
+
 		EnemyShip shooter = this.shooters.get(index);
 
 		if (this.shootingCooldown.checkFinished()) {
@@ -340,6 +341,10 @@ public class EnemyShipFormation implements Iterable<EnemyShip> {
 			bullets.add(BulletPool.getBullet(shooter.getPositionX()
 					+ shooter.width / 2, shooter.getPositionY(), BULLET_SPEED));
 		}
+
+
+
+
 	}
 
 	/**

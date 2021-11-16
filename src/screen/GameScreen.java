@@ -1,5 +1,7 @@
 package screen;
 
+import java.util.Random;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.HashSet;
 import java.util.Set;
@@ -70,6 +72,8 @@ public class GameScreen extends Screen {
 	private boolean levelFinished;
 	/** Checks if a bonus life is received. */
 	private boolean bonusLife;
+	// item Types
+	private Color items;
 
 	/**
 	 * Constructor, establishes the properties of the screen.
@@ -180,8 +184,24 @@ public class GameScreen extends Screen {
 			}
 			if (this.enemyShipSpecial == null
 					&& this.enemyShipSpecialCooldown.checkFinished()) {
-				this.enemyShipSpecial = new EnemyShip();
+
+				//sp ship's color and effects
+				Random r = new Random();
+				int n = r.nextInt(3);
+				if(n == 0) {
+					this.enemyShipSpecial = new EnemyShip(Color.blue);
+					items = Color.blue;
+				}else if(n == 1){
+					this.enemyShipSpecial = new EnemyShip(Color.red);
+					items = Color.red;
+				}else{
+					this.enemyShipSpecial = new EnemyShip(Color.yellow);
+					items = Color.yellow;
+				}
+				this.enemyShipSpecialCooldown.setCooldown(1);
 				this.enemyShipSpecialCooldown.reset();
+
+
 				this.logger.info("A special ship appears");
 			}
 			if (this.enemyShipSpecial != null
@@ -270,6 +290,7 @@ public class GameScreen extends Screen {
 	 */
 	private void manageCollisions() {
 		Set<Bullet> recyclable = new HashSet<Bullet>();
+
 		for (Bullet bullet : this.bullets)
 			if (bullet.getSpeed() > 0) {
 				if (checkCollision(bullet, this.ship) && !this.levelFinished) {
@@ -294,15 +315,38 @@ public class GameScreen extends Screen {
 						&& !this.enemyShipSpecial.isDestroyed()
 						&& checkCollision(bullet, this.enemyShipSpecial)) {
 					this.score += this.enemyShipSpecial.getPointValue();
-					this.shipsDestroyed++;
+
+
+					//when sp enemy has been shoot,functions will be start.
+					if(this.items == Color.red){
+						this.ship.setSpeed();
+					}else if(this.items == Color.blue){
+						this.ship.setShootingCooldown();
+					}else{
+						this.lives++;
+					}
+
+
+
 					this.enemyShipSpecial.destroy();
 					this.enemyShipSpecialExplosionCooldown.reset();
+
+
+
+
 					recyclable.add(bullet);
 				}
+
 			}
 		this.bullets.removeAll(recyclable);
 		BulletPool.recycle(recyclable);
 	}
+
+/*	useless function
+public void shootitem(int x,int y){
+
+		bullets.add(BulletPool.getBullet(x, y, 3));
+	}*/
 
 	/**
 	 * Checks if two entities are colliding.
