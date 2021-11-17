@@ -20,7 +20,7 @@ import screen.TitleScreen;
  * @author <a href="mailto:RobertoIA1987@gmail.com">Roberto Izquierdo Amo</a>
  * 
  */
-public final class Core {
+public final class  Core {
 
 	/** Width of current screen. */
 	private static final int WIDTH = 640;
@@ -38,7 +38,7 @@ public final class Core {
 	private static final int EXTRA_LIFE_FRECUENCY = 3;
 	/** Total number of levels. */
 	private static final int NUM_LEVELS = 7;
-
+  
 	/** Difficulty settings for level 1. */
 	private static final GameSettings SETTINGS_LEVEL_1 = new GameSettings(5, 4, 60, 2000);
 	/** Difficulty settings for level 2. */

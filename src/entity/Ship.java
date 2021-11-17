@@ -26,6 +26,8 @@ public class Ship extends Entity {
 	/** Movement of the ship for each unit of time. */
 	private static final int SPEED = 2;
 
+	private static int SpeedUp;
+
 	/** Minimum time between shots. */
 	private Cooldown shootingCooldown;
 	/** Minimum time between Special shots. */
@@ -53,14 +55,14 @@ public class Ship extends Entity {
 	 * reached.
 	 */
 	public final void moveRight() {
-		this.positionX += SPEED;
+		this.positionX = this.positionX +SPEED + SpeedUp;
 	}
 
 	/**
 	 * Moves the ship speed units left, or until the left screen border is reached.
 	 */
 	public final void moveLeft() {
-		this.positionX -= SPEED;
+		this.positionX = this.positionX -SPEED - SpeedUp;
 	}
 
 	/**
@@ -122,5 +124,26 @@ public class Ship extends Entity {
 	 */
 	public final int getSpeed() {
 		return SPEED;
+	}
+
+	public final void setSpeed() {
+		this.SpeedUp = 5;
+
+	}
+	public final void resetSpeed() {
+		this.SpeedUp = 0;
+
+	}
+
+	//functions , set the shootingcooldown
+	public final void setShootingCooldown(){
+
+		this.shootingCooldown = Core.getCooldown(100);
+
+	}
+	public final void resetShootingCooldown(){
+
+		this.shootingCooldown = Core.getCooldown(750);
+
 	}
 }

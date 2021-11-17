@@ -1,5 +1,6 @@
 package entity;
 
+
 import java.awt.Color;
 
 import engine.Cooldown;
@@ -67,8 +68,8 @@ public class EnemyShip extends Entity {
 	 * Constructor, establishes the ship's properties for a special ship, with known
 	 * starting properties.
 	 */
-	public EnemyShip() {
-		super(-32, 60, 16 * 2, 7 * 2, Color.RED);
+	public EnemyShip(Color color) {
+		super(-32, 60, 16 * 2, 7 * 2, color);
 
 		this.spriteType = SpriteType.EnemyShipSpecial;
 		this.isDestroyed = false;
