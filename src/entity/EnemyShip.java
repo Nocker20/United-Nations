@@ -14,7 +14,7 @@ import engine.DrawManager.SpriteType;
  * 
  */
 public class EnemyShip extends Entity {
-	
+
 	/** Point value of a type A enemy. */
 	private static final int A_TYPE_POINTS = 10;
 	/** Point value of a type B enemy. */
@@ -34,16 +34,12 @@ public class EnemyShip extends Entity {
 	/**
 	 * Constructor, establishes the ship's properties.
 	 * 
-	 * @param positionX
-	 *            Initial position of the ship in the X axis.
-	 * @param positionY
-	 *            Initial position of the ship in the Y axis.
-	 * @param spriteType
-	 *            Sprite type, image corresponding to the ship.
+	 * @param positionX  Initial position of the ship in the X axis.
+	 * @param positionY  Initial position of the ship in the Y axis.
+	 * @param spriteType Sprite type, image corresponding to the ship.
 	 */
-	public EnemyShip(final int positionX, final int positionY,
-			final SpriteType spriteType) {
-		super(positionX, positionY, 12 * 2, 8 * 2, Color.WHITE);
+	public EnemyShip(final int positionX, final int positionY, final SpriteType spriteType) {
+		super(positionX, positionY, 12 * 2, 8 * 2, Color.green);
 
 		this.spriteType = spriteType;
 		this.animationCooldown = Core.getCooldown(500);
@@ -69,8 +65,8 @@ public class EnemyShip extends Entity {
 	}
 
 	/**
-	 * Constructor, establishes the ship's properties for a special ship, with
-	 * known starting properties.
+	 * Constructor, establishes the ship's properties for a special ship, with known
+	 * starting properties.
 	 */
 	public EnemyShip(Color color) {
 		super(-32, 60, 16 * 2, 7 * 2, color);
@@ -92,10 +88,8 @@ public class EnemyShip extends Entity {
 	/**
 	 * Moves the ship the specified distance.
 	 * 
-	 * @param distanceX
-	 *            Distance to move in the X axis.
-	 * @param distanceY
-	 *            Distance to move in the Y axis.
+	 * @param distanceX Distance to move in the X axis.
+	 * @param distanceY Distance to move in the Y axis.
 	 */
 	public final void move(final int distanceX, final int distanceY) {
 		this.positionX += distanceX;
