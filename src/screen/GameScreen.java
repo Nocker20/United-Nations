@@ -222,6 +222,11 @@ public class GameScreen extends Screen {
 		if ((this.enemyShipFormation.isEmpty() || this.lives == 0)
 				&& !this.levelFinished) {
 			this.levelFinished = true;
+
+			//reset the functions
+			this.ship.resetShootingCooldown();
+			this.ship.resetSpeed();
+
 			this.screenFinishedCooldown.reset();
 		}
 
@@ -300,6 +305,9 @@ public class GameScreen extends Screen {
 						this.lives--;
 						this.logger.info("Hit on player ship, " + this.lives
 								+ " lives remaining.");
+						//Reset your ability when you are hit.
+						this.ship.resetSpeed();
+						this.ship.resetShootingCooldown();
 					}
 				}
 			} else {
