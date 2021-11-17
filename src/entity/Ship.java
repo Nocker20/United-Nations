@@ -20,7 +20,9 @@ public class Ship extends Entity {
 	/** Speed of the bullets shot by the ship. */
 	private static final int BULLET_SPEED = -6;
 	/** Movement of the ship for each unit of time. */
-	private static  int SPEED = 2;
+	private static final int SPEED = 2;
+
+	private static int SpeedUp;
 	
 	/** Minimum time between shots. */
 	private Cooldown shootingCooldown;
@@ -48,7 +50,7 @@ public class Ship extends Entity {
 	 * reached.
 	 */
 	public final void moveRight() {
-		this.positionX += SPEED;
+		this.positionX = this.positionX +SPEED + SpeedUp;
 	}
 
 	/**
@@ -56,7 +58,7 @@ public class Ship extends Entity {
 	 * reached.
 	 */
 	public final void moveLeft() {
-		this.positionX -= SPEED;
+		this.positionX = this.positionX -SPEED - SpeedUp;
 	}
 
 	/**
@@ -112,11 +114,11 @@ public class Ship extends Entity {
 	}
 
 	public final void setSpeed() {
-		this.SPEED = 10;
+		this.SpeedUp = 5;
 
 	}
 	public final void resetSpeed() {
-		this.SPEED = 2;
+		this.SpeedUp = 0;
 
 	}
 
