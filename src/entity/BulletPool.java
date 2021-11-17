@@ -9,7 +9,7 @@ import java.util.Set;
  * @author <a href="mailto:RobertoIA1987@gmail.com">Roberto Izquierdo Amo</a>
  * 
  */
-public final class BulletPool {
+public class BulletPool {
 
 	/** Set of already created bullets. */
 	private static Set<Bullet> pool = new HashSet<Bullet>();
@@ -22,30 +22,26 @@ public final class BulletPool {
 	}
 
 	/**
-	 * Returns a bullet from the pool if one is available, a new one if there
-	 * isn't.
+	 * Returns a bullet from the pool if one is available, a new one if there isn't.
 	 * 
-	 * @param positionX
-	 *            Requested position of the bullet in the X axis.
-	 * @param positionY
-	 *            Requested position of the bullet in the Y axis.
-	 * @param speed
-	 *            Requested speed of the bullet, positive or negative depending
-	 *            on direction - positive is down.
+	 * @param positionX Requested position of the bullet in the X axis.
+	 * @param positionY Requested position of the bullet in the Y axis.
+	 * @param speed     Requested speed of the bullet, positive or negative
+	 *                  depending on direction - positive is down.
 	 * @return Requested bullet.
 	 */
-	public static Bullet getBullet(final int positionX,
-			final int positionY, final int speed) {
+	public static Bullet getBullet(final int positionX, final int positionY, final int speed) {
 		Bullet bullet;
+
 		if (!pool.isEmpty()) {
 			bullet = pool.iterator().next();
 			pool.remove(bullet);
 			bullet.setPositionX(positionX - bullet.getWidth() / 2);
-			bullet.setPositionY(positionY);
+			bullet.setPositionY(positionY - 22);
 			bullet.setSpeed(speed);
 			bullet.setSprite();
 		} else {
-			bullet = new Bullet(positionX, positionY, speed);
+			bullet = new Bullet(positionX, positionY, 6, 8, speed);
 			bullet.setPositionX(positionX - bullet.getWidth() / 2);
 		}
 		return bullet;
@@ -54,8 +50,7 @@ public final class BulletPool {
 	/**
 	 * Adds one or more bullets to the list of available ones.
 	 * 
-	 * @param bullet
-	 *            Bullets to recycle.
+	 * @param bullet Bullets to recycle.
 	 */
 	public static void recycle(final Set<Bullet> bullet) {
 		pool.addAll(bullet);
