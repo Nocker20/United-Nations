@@ -6,18 +6,8 @@ import java.awt.event.KeyEvent;
 import java.util.HashSet;
 import java.util.Set;
 
-import engine.Cooldown;
-import engine.Core;
-import engine.GameSettings;
-import engine.GameState;
-import entity.Bullet;
-import entity.BulletPool;
-import entity.EnemyShip;
-import entity.EnemyShipFormation;
-import entity.Entity;
-import entity.SBullet;
-import entity.SBulletPool;
-import entity.Ship;
+import engine.*;
+import entity.*;
 
 /**
  * Implements the game screen, where the action happens.
@@ -80,6 +70,10 @@ public class GameScreen extends Screen {
 	private boolean bonusLife;
 	// item Types
 	private Color items;
+
+	//boss Enemy
+	private EnemyShip BossEnemy;
+	private BossEnemyFormation BossEnemyFormation;
 
 	/**
 	 * Constructor, establishes the properties of the screen.
@@ -213,8 +207,15 @@ public class GameScreen extends Screen {
 			}
 
 			this.ship.update();
-			this.enemyShipFormation.update();
-			this.enemyShipFormation.shoot(this.bullets);
+
+			if(BossEnemy == null) {
+				this.enemyShipFormation.update();
+
+				this.enemyShipFormation.shoot(this.bullets);
+			}else{
+				this.BossEnemyFormation.update();
+
+			}
 		}
 
 		manageCollisions();
@@ -224,6 +225,7 @@ public class GameScreen extends Screen {
 		cleanSBullets();
 		draw();
 
+		/*og level up
 		if ((this.enemyShipFormation.isEmpty() || this.lives == 0) && !this.levelFinished) {
 			this.levelFinished = true;
 
@@ -233,6 +235,26 @@ public class GameScreen extends Screen {
 
 			this.screenFinishedCooldown.reset();
 		}
+		*/
+
+		//boss apears function
+
+		if ((this.enemyShipFormation.isEmpty() || this.lives == 0) && !this.levelFinished) {
+
+			if (this.BossEnemy == null) {
+				this.lives ++;
+
+
+				this.BossEnemy= new EnemyShip(250,500, DrawManager.SpriteType.EnemyShipSpecial);
+				this.BossEnemyFormation = new BossEnemyFormation(this.BossEnemy.getPositionX(),this.BossEnemy.getPositionY(),100,100,10,this.BossEnemy);
+
+
+				this.logger.info("Boss ship appears");
+			}
+		}
+
+
+
 
 		if (this.levelFinished && this.screenFinishedCooldown.checkFinished())
 			this.isRunning = false;
@@ -243,14 +265,26 @@ public class GameScreen extends Screen {
 	 * Draws the elements associated with the screen.
 	 */
 	private void draw() {
+
 		drawManager.initDrawing(this);
 
 		drawManager.drawEntity(this.ship, this.ship.getPositionX(), this.ship.getPositionY());
+
 		if (this.enemyShipSpecial != null)
 			drawManager.drawEntity(this.enemyShipSpecial, this.enemyShipSpecial.getPositionX(),
 					this.enemyShipSpecial.getPositionY());
 
 		enemyShipFormation.draw();
+
+		//draw new boss entity
+		if (this.BossEnemy != null){
+		drawManager.drawEntity(this.BossEnemy, this.BossEnemy.getPositionX(),
+				this.BossEnemy.getPositionY());
+			BossEnemyFormation.draw();
+		}
+
+
+
 
 		for (Bullet bullet : this.bullets)
 			drawManager.drawEntity(bullet, bullet.getPositionX(), bullet.getPositionY());
