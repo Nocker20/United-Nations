@@ -18,11 +18,9 @@ public class Cooldown {
 	private long time;
 
 	/**
-	 * Constructor, established the time until the action can be performed
-	 * again.
+	 * Constructor, established the time until the action can be performed again.
 	 * 
-	 * @param milliseconds
-	 *            Time until cooldown period is finished.
+	 * @param milliseconds Time until cooldown period is finished.
 	 */
 	protected Cooldown(final int milliseconds) {
 		this.milliseconds = milliseconds;
@@ -32,13 +30,11 @@ public class Cooldown {
 	}
 
 	/**
-	 * Constructor, established the time until the action can be performed
-	 * again, with a variation of +/- variance.
+	 * Constructor, established the time until the action can be performed again,
+	 * with a variation of +/- variance.
 	 * 
-	 * @param milliseconds
-	 *            Time until cooldown period is finished.
-	 * @param variance
-	 *            Variance in the cooldown period.
+	 * @param milliseconds Time until cooldown period is finished.
+	 * @param variance     Variance in the cooldown period.
 	 */
 	protected Cooldown(final int milliseconds, final int variance) {
 		this.milliseconds = milliseconds;
@@ -52,10 +48,13 @@ public class Cooldown {
 	 * @return Cooldown state.
 	 */
 	public final boolean checkFinished() {
-		if ((this.time == 0)
-				|| this.time + this.duration < System.currentTimeMillis())
+		if ((this.time == 0) || this.time + this.duration < System.currentTimeMillis())
 			return true;
 		return false;
+	}
+	//setcooldown functions
+	public void setCooldown(int  time){
+		this.milliseconds = time;
 	}
 
 	/**
@@ -65,7 +64,6 @@ public class Cooldown {
 		this.time = System.currentTimeMillis();
 		if (this.variance != 0)
 			this.duration = (this.milliseconds - this.variance)
-					+ (int) (Math.random()
-							* (this.milliseconds + this.variance));
+					+ (int) (Math.random() * (this.milliseconds + this.variance));
 	}
 }

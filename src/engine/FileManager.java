@@ -59,30 +59,23 @@ public final class FileManager {
 	/**
 	 * Loads sprites from disk.
 	 * 
-	 * @param spriteMap
-	 *            Mapping of sprite type and empty boolean matrix that will
-	 *            contain the image.
-	 * @throws IOException
-	 *             In case of loading problems.
+	 * @param spriteMap Mapping of sprite type and empty boolean matrix that will
+	 *                  contain the image.
+	 * @throws IOException In case of loading problems.
 	 */
-	public void loadSprite(final Map<SpriteType, boolean[][]> spriteMap)
-			throws IOException {
+	public void loadSprite(final Map<SpriteType, boolean[][]> spriteMap) throws IOException {
 		InputStream inputStream = null;
-
 		try {
-			inputStream = DrawManager.class.getClassLoader()
-					.getResourceAsStream("graphics");
+			inputStream = DrawManager.class.getClassLoader().getResourceAsStream("graphics");
 			char c;
 
 			// Sprite loading.
-			for (Map.Entry<SpriteType, boolean[][]> sprite : spriteMap
-					.entrySet()) {
+			for (Map.Entry<SpriteType, boolean[][]> sprite : spriteMap.entrySet()) {
 				for (int i = 0; i < sprite.getValue().length; i++)
 					for (int j = 0; j < sprite.getValue()[i].length; j++) {
 						do
 							c = (char) inputStream.read();
 						while (c != '0' && c != '1');
-
 						if (c == '1')
 							sprite.getValue()[i][j] = true;
 						else
@@ -90,36 +83,32 @@ public final class FileManager {
 					}
 				logger.fine("Sprite " + sprite.getKey() + " loaded.");
 			}
-			if (inputStream != null)
+			if (inputStream != null) {
 				inputStream.close();
+			}
 		} finally {
-			if (inputStream != null)
+			if (inputStream != null) {
 				inputStream.close();
+			}
 		}
 	}
 
 	/**
 	 * Loads a font of a given size.
 	 * 
-	 * @param size
-	 *            Point size of the font.
+	 * @param size Point size of the font.
 	 * @return New font.
-	 * @throws IOException
-	 *             In case of loading problems.
-	 * @throws FontFormatException
-	 *             In case of incorrect font format.
+	 * @throws IOException         In case of loading problems.
+	 * @throws FontFormatException In case of incorrect font format.
 	 */
-	public Font loadFont(final float size) throws IOException,
-			FontFormatException {
+	public Font loadFont(final float size) throws IOException, FontFormatException {
 		InputStream inputStream = null;
 		Font font;
 
 		try {
 			// Font loading.
-			inputStream = FileManager.class.getClassLoader()
-					.getResourceAsStream("font.ttf");
-			font = Font.createFont(Font.TRUETYPE_FONT, inputStream).deriveFont(
-					size);
+			inputStream = FileManager.class.getClassLoader().getResourceAsStream("font.ttf");
+			font = Font.createFont(Font.TRUETYPE_FONT, inputStream).deriveFont(size);
 		} finally {
 			if (inputStream != null)
 				inputStream.close();
@@ -129,12 +118,10 @@ public final class FileManager {
 	}
 
 	/**
-	 * Returns the application default scores if there is no user high scores
-	 * file.
+	 * Returns the application default scores if there is no user high scores file.
 	 * 
 	 * @return Default high scores.
-	 * @throws IOException
-	 *             In case of loading problems.
+	 * @throws IOException In case of loading problems.
 	 */
 	private List<Score> loadDefaultHighScores() throws IOException {
 		List<Score> highScores = new ArrayList<Score>();
@@ -142,8 +129,7 @@ public final class FileManager {
 		BufferedReader reader = null;
 
 		try {
-			inputStream = FileManager.class.getClassLoader()
-					.getResourceAsStream("scores");
+			inputStream = FileManager.class.getClassLoader().getResourceAsStream("scores");
 			reader = new BufferedReader(new InputStreamReader(inputStream));
 
 			Score highScore = null;
@@ -169,8 +155,7 @@ public final class FileManager {
 	 * value.
 	 * 
 	 * @return Sorted list of scores - players.
-	 * @throws IOException
-	 *             In case of loading problems.
+	 * @throws IOException In case of loading problems.
 	 */
 	public List<Score> loadHighScores() throws IOException {
 
@@ -179,18 +164,16 @@ public final class FileManager {
 		BufferedReader bufferedReader = null;
 
 		try {
-			String jarPath = FileManager.class.getProtectionDomain()
-					.getCodeSource().getLocation().getPath();
+			String jarPath = FileManager.class.getProtectionDomain().getCodeSource().getLocation().getPath();
 			jarPath = URLDecoder.decode(jarPath, "UTF-8");
 
 			String scoresPath = new File(jarPath).getParent();
 			scoresPath += File.separator;
-			scoresPath += "scores";
+			scoresPath += "res/scores";
 
 			File scoresFile = new File(scoresPath);
 			inputStream = new FileInputStream(scoresFile);
-			bufferedReader = new BufferedReader(new InputStreamReader(
-					inputStream, Charset.forName("UTF-8")));
+			bufferedReader = new BufferedReader(new InputStreamReader(inputStream, Charset.forName("UTF-8")));
 
 			logger.info("Loading user high scores.");
 
@@ -221,24 +204,20 @@ public final class FileManager {
 	/**
 	 * Saves user high scores to disk.
 	 * 
-	 * @param highScores
-	 *            High scores to save.
-	 * @throws IOException
-	 *             In case of loading problems.
+	 * @param highScores High scores to save.
+	 * @throws IOException In case of loading problems.
 	 */
-	public void saveHighScores(final List<Score> highScores) 
-			throws IOException {
+	public void saveHighScores(final List<Score> highScores) throws IOException {
 		OutputStream outputStream = null;
 		BufferedWriter bufferedWriter = null;
 
 		try {
-			String jarPath = FileManager.class.getProtectionDomain()
-					.getCodeSource().getLocation().getPath();
+			String jarPath = FileManager.class.getProtectionDomain().getCodeSource().getLocation().getPath();
 			jarPath = URLDecoder.decode(jarPath, "UTF-8");
 
 			String scoresPath = new File(jarPath).getParent();
 			scoresPath += File.separator;
-			scoresPath += "scores";
+			scoresPath += "res/scores";
 
 			File scoresFile = new File(scoresPath);
 
@@ -246,8 +225,7 @@ public final class FileManager {
 				scoresFile.createNewFile();
 
 			outputStream = new FileOutputStream(scoresFile);
-			bufferedWriter = new BufferedWriter(new OutputStreamWriter(
-					outputStream, Charset.forName("UTF-8")));
+			bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, Charset.forName("UTF-8")));
 
 			logger.info("Saving user high scores.");
 

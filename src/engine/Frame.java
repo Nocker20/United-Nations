@@ -1,9 +1,7 @@
 package engine;
 
 import java.awt.Insets;
-
 import javax.swing.JFrame;
-
 import screen.Screen;
 
 /**
@@ -12,7 +10,6 @@ import screen.Screen;
  * @author <a href="mailto:RobertoIA1987@gmail.com">Roberto Izquierdo Amo</a>
  * 
  */
-@SuppressWarnings("serial")
 public class Frame extends JFrame {
 
 	/** Frame width. */
@@ -25,10 +22,8 @@ public class Frame extends JFrame {
 	/**
 	 * Initializes the new frame.
 	 * 
-	 * @param width
-	 *            Frame width.
-	 * @param height
-	 *            Frame height.
+	 * @param width  Frame width.
+	 * @param height Frame height.
 	 */
 	public Frame(final int width, final int height) {
 		setSize(width, height);
@@ -44,13 +39,13 @@ public class Frame extends JFrame {
 		setTitle("Invaders");
 
 		addKeyListener(Core.getInputManager());
+
 	}
 
 	/**
 	 * Sets current screen.
 	 * 
-	 * @param screen
-	 *            Screen to show.
+	 * @param screen Screen to show.
 	 * @return Return code of the finished screen.
 	 */
 	public final int setScreen(final Screen screen) {

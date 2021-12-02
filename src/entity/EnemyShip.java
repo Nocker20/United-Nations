@@ -5,6 +5,7 @@ import java.awt.Color;
 import engine.Cooldown;
 import engine.Core;
 import engine.DrawManager.SpriteType;
+import resources.SoundEffectPlayer;
 
 /**
  * Implements a enemy ship, to be destroyed by the player.
@@ -13,7 +14,7 @@ import engine.DrawManager.SpriteType;
  * 
  */
 public class EnemyShip extends Entity {
-	
+
 	/** Point value of a type A enemy. */
 	private static final int A_TYPE_POINTS = 10;
 	/** Point value of a type B enemy. */
@@ -33,46 +34,42 @@ public class EnemyShip extends Entity {
 	/**
 	 * Constructor, establishes the ship's properties.
 	 * 
-	 * @param positionX
-	 *            Initial position of the ship in the X axis.
-	 * @param positionY
-	 *            Initial position of the ship in the Y axis.
-	 * @param spriteType
-	 *            Sprite type, image corresponding to the ship.
+	 * @param positionX  Initial position of the ship in the X axis.
+	 * @param positionY  Initial position of the ship in the Y axis.
+	 * @param spriteType Sprite type, image corresponding to the ship.
 	 */
-	public EnemyShip(final int positionX, final int positionY,
-			final SpriteType spriteType) {
-		super(positionX, positionY, 12 * 2, 8 * 2, Color.WHITE);
+	public EnemyShip(final int positionX, final int positionY, final SpriteType spriteType) {
+		super(positionX, positionY, 12 * 2, 8 * 2, Color.green);
 
 		this.spriteType = spriteType;
 		this.animationCooldown = Core.getCooldown(500);
 		this.isDestroyed = false;
 
 		switch (this.spriteType) {
-		case EnemyShipA1:
-		case EnemyShipA2:
-			this.pointValue = A_TYPE_POINTS;
-			break;
-		case EnemyShipB1:
-		case EnemyShipB2:
-			this.pointValue = B_TYPE_POINTS;
-			break;
-		case EnemyShipC1:
-		case EnemyShipC2:
-			this.pointValue = C_TYPE_POINTS;
-			break;
-		default:
-			this.pointValue = 0;
-			break;
+			case EnemyShipA1:
+			case EnemyShipA2:
+				this.pointValue = A_TYPE_POINTS;
+				break;
+			case EnemyShipB1:
+			case EnemyShipB2:
+				this.pointValue = B_TYPE_POINTS;
+				break;
+			case EnemyShipC1:
+			case EnemyShipC2:
+				this.pointValue = C_TYPE_POINTS;
+				break;
+			default:
+				this.pointValue = 0;
+				break;
 		}
 	}
 
 	/**
-	 * Constructor, establishes the ship's properties for a special ship, with
-	 * known starting properties.
+	 * Constructor, establishes the ship's properties for a special ship, with known
+	 * starting properties.
 	 */
-	public EnemyShip() {
-		super(-32, 60, 16 * 2, 7 * 2, Color.RED);
+	public EnemyShip(Color color) {
+		super(-32, 60, 16 * 2, 7 * 2, color);
 
 		this.spriteType = SpriteType.EnemyShipSpecial;
 		this.isDestroyed = false;
@@ -91,10 +88,8 @@ public class EnemyShip extends Entity {
 	/**
 	 * Moves the ship the specified distance.
 	 * 
-	 * @param distanceX
-	 *            Distance to move in the X axis.
-	 * @param distanceY
-	 *            Distance to move in the Y axis.
+	 * @param distanceX Distance to move in the X axis.
+	 * @param distanceY Distance to move in the Y axis.
 	 */
 	public final void move(final int distanceX, final int distanceY) {
 		this.positionX += distanceX;
@@ -109,26 +104,26 @@ public class EnemyShip extends Entity {
 			this.animationCooldown.reset();
 
 			switch (this.spriteType) {
-			case EnemyShipA1:
-				this.spriteType = SpriteType.EnemyShipA2;
-				break;
-			case EnemyShipA2:
-				this.spriteType = SpriteType.EnemyShipA1;
-				break;
-			case EnemyShipB1:
-				this.spriteType = SpriteType.EnemyShipB2;
-				break;
-			case EnemyShipB2:
-				this.spriteType = SpriteType.EnemyShipB1;
-				break;
-			case EnemyShipC1:
-				this.spriteType = SpriteType.EnemyShipC2;
-				break;
-			case EnemyShipC2:
-				this.spriteType = SpriteType.EnemyShipC1;
-				break;
-			default:
-				break;
+				case EnemyShipA1:
+					this.spriteType = SpriteType.EnemyShipA2;
+					break;
+				case EnemyShipA2:
+					this.spriteType = SpriteType.EnemyShipA1;
+					break;
+				case EnemyShipB1:
+					this.spriteType = SpriteType.EnemyShipB2;
+					break;
+				case EnemyShipB2:
+					this.spriteType = SpriteType.EnemyShipB1;
+					break;
+				case EnemyShipC1:
+					this.spriteType = SpriteType.EnemyShipC2;
+					break;
+				case EnemyShipC2:
+					this.spriteType = SpriteType.EnemyShipC1;
+					break;
+				default:
+					break;
 			}
 		}
 	}
@@ -137,6 +132,8 @@ public class EnemyShip extends Entity {
 	 * Destroys the ship, causing an explosion.
 	 */
 	public final void destroy() {
+		SoundEffectPlayer.sound("src\\resources\\sbullet.wav");
+
 		this.isDestroyed = true;
 		this.spriteType = SpriteType.Explosion;
 	}
