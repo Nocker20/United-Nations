@@ -32,9 +32,9 @@ public class GameScreen extends Screen {
 	/** Bonus score for each life remaining at the end of the level. */
 	private static final int LIFE_SCORE = 100;
 	/** Minimum time between bonus ship's appearances. */
-	private static final int BONUS_SHIP_INTERVAL = 20000;
+	private static final int BONUS_SHIP_INTERVAL = 40000;
 	/** Maximum variance in the time between bonus ship's appearances. */
-	private static final int BONUS_SHIP_VARIANCE = 10000;
+	private static final int BONUS_SHIP_VARIANCE = 30000;
 	/** Time until bonus ship explosion disappears. */
 	private static final int BONUS_SHIP_EXPLOSION = 500;
 	/** Time from finishing the level to screen change. */
@@ -80,9 +80,9 @@ public class GameScreen extends Screen {
 	private boolean bonusLife;
 	// item Types
 	private Color items;
-		/** Checks if game is paused. */
+	/** Checks if game is paused. */
 	private boolean isPaused;
-	/** check if esc is pressed. for pauce function 2020088895*/
+	/** check if esc is pressed. for pauce function 2020088895 */
 	private boolean escapePressed;
 
 	/**
@@ -151,26 +151,26 @@ public class GameScreen extends Screen {
 	 * Updates the elements on screen and checks for events.
 	 */
 	protected final void update() {
-		if(inputManager.isKeyDown(KeyEvent.VK_ESCAPE) && !escapePressed){
+		if (inputManager.isKeyDown(KeyEvent.VK_ESCAPE) && !escapePressed) {
 			escapePressed = true;
-			if(this.isPaused == true){
+			if (this.isPaused == true) {
 				this.isPaused = false;
-			}
-			else{
+			} else {
 				this.isPaused = true;
 			}
-		}
-		else if(!inputManager.isKeyDown(KeyEvent.VK_ESCAPE) && escapePressed){
+		} else if (!inputManager.isKeyDown(KeyEvent.VK_ESCAPE) && escapePressed) {
 			escapePressed = false;
 		}
 		super.update();
 
-		if(!this.isPaused){
+		if (!this.isPaused) {
 			if (this.inputDelay.checkFinished() && !this.levelFinished) {
 
 				if (!this.ship.isDestroyed()) {
-					boolean moveRight = inputManager.isKeyDown(KeyEvent.VK_RIGHT) || inputManager.isKeyDown(KeyEvent.VK_D);
-					boolean moveLeft = inputManager.isKeyDown(KeyEvent.VK_LEFT) || inputManager.isKeyDown(KeyEvent.VK_A);
+					boolean moveRight = inputManager.isKeyDown(KeyEvent.VK_RIGHT)
+							|| inputManager.isKeyDown(KeyEvent.VK_D);
+					boolean moveLeft = inputManager.isKeyDown(KeyEvent.VK_LEFT)
+							|| inputManager.isKeyDown(KeyEvent.VK_A);
 
 					boolean isRightBorder = this.ship.getPositionX() + this.ship.getWidth()
 							+ this.ship.getSpeed() > this.width - 1;
@@ -205,22 +205,21 @@ public class GameScreen extends Screen {
 				if (this.enemyShipSpecial == null
 						&& this.enemyShipSpecialCooldown.checkFinished()) {
 
-					//sp ship's color and effects
+					// sp ship's color and effects
 					Random r = new Random();
 					int n = r.nextInt(3);
-					if(n == 0) {
+					if (n == 0) {
 						this.enemyShipSpecial = new EnemyShip(Color.blue);
 						items = Color.blue;
-					}else if(n == 1){
+					} else if (n == 1) {
 						this.enemyShipSpecial = new EnemyShip(Color.red);
 						items = Color.red;
-					}else{
+					} else {
 						this.enemyShipSpecial = new EnemyShip(Color.yellow);
 						items = Color.yellow;
 					}
 					this.enemyShipSpecialCooldown.setCooldown(1);
 					this.enemyShipSpecialCooldown.reset();
-
 
 					this.logger.info("A special ship appears");
 				}
@@ -239,12 +238,11 @@ public class GameScreen extends Screen {
 
 			cleanBullets();
 			cleanSBullets();
-		
 
 			if ((this.enemyShipFormation.isEmpty() || this.lives == 0) && !this.levelFinished) {
 				this.levelFinished = true;
 
-				//reset the functions
+				// reset the functions
 				this.ship.resetShootingCooldown();
 				this.ship.resetSpeed();
 
@@ -289,7 +287,7 @@ public class GameScreen extends Screen {
 			drawManager.drawHorizontalLine(this, this.height / 2 - this.height / 12);
 			drawManager.drawHorizontalLine(this, this.height / 2 + this.height / 12);
 		}
-		
+
 		drawManager.drawPauseScreen(this, isPaused);
 
 		drawManager.completeDrawing(this);
@@ -339,7 +337,7 @@ public class GameScreen extends Screen {
 
 						this.logger.info("Hit on player ship, " + this.lives
 								+ " lives remaining.");
-						//Reset your ability when you are hit.
+						// Reset your ability when you are hit.
 						this.ship.resetSpeed();
 						this.ship.resetShootingCooldown();
 
@@ -357,23 +355,17 @@ public class GameScreen extends Screen {
 						&& checkCollision(bullet, this.enemyShipSpecial)) {
 					this.score += this.enemyShipSpecial.getPointValue();
 
-
-					//when sp enemy has been shoot,functions will be start.
-					if(this.items == Color.red){
+					// when sp enemy has been shoot,functions will be start.
+					if (this.items == Color.red) {
 						this.ship.setSpeed();
-					}else if(this.items == Color.blue){
+					} else if (this.items == Color.blue) {
 						this.ship.setShootingCooldown();
-					}else{
+					} else {
 						this.lives++;
 					}
 
-
-
 					this.enemyShipSpecial.destroy();
 					this.enemyShipSpecialExplosionCooldown.reset();
-
-
-
 
 					recyclable.add(bullet);
 				}
@@ -383,11 +375,13 @@ public class GameScreen extends Screen {
 		BulletPool.recycle(recyclable);
 	}
 
-/*	useless function
-public void shootitem(int x,int y){
-
-		bullets.add(BulletPool.getBullet(x, y, 3));
-	}*/
+	/*
+	 * useless function
+	 * public void shootitem(int x,int y){
+	 * 
+	 * bullets.add(BulletPool.getBullet(x, y, 3));
+	 * }
+	 */
 
 	/**
 	 * Manages collisions between Special bullets and ships.
@@ -397,7 +391,7 @@ public void shootitem(int x,int y){
 
 		for (SBullet sbullet : this.sbullets) {
 			for (EnemyShip enemyShip : this.enemyShipFormation) {
-				if (!enemyShip.isDestroyed() && checkCollision(sbullet, enemyShip)) {
+				if (!enemyShip.isDestroyed() && scheckCollision(sbullet, enemyShip)) {
 					this.score += enemyShip.getPointValue() + 10;
 					this.shipsDestroyed++;
 					this.enemyShipFormation.destroy(enemyShip);
@@ -405,7 +399,7 @@ public void shootitem(int x,int y){
 				}
 			}
 			if (this.enemyShipSpecial != null && !this.enemyShipSpecial.isDestroyed()
-					&& checkCollision(sbullet, this.enemyShipSpecial)) {
+					&& scheckCollision(sbullet, this.enemyShipSpecial)) {
 				this.score += this.enemyShipSpecial.getPointValue() + 100;
 				this.shipsDestroyed++;
 				this.enemyShipSpecial.destroy();
@@ -439,6 +433,29 @@ public void shootitem(int x,int y){
 		int distanceY = Math.abs(centerAY - centerBY);
 
 		return distanceX < maxDistanceX && distanceY < maxDistanceY;
+	}
+
+	/**
+	 * Checks if two entities are colliding.
+	 * 
+	 * @param a First entity, the bullet.
+	 * @param b Second entity, the ship.
+	 * @return Result of the collision test.
+	 */
+	private boolean scheckCollision(final Entity a, final Entity b) {
+		// Calculate center point of the entities in both axis.
+		int centerAX = a.getPositionX() + a.getWidth() / 2;
+		int centerAY = a.getPositionY() + a.getHeight() / 2;
+		int centerBX = b.getPositionX() + b.getWidth() / 2;
+		int centerBY = b.getPositionY() + b.getHeight() / 2;
+		// Calculate maximum distance without collision.
+		int maxDistanceX = a.getWidth() / 2 + b.getWidth() / 2;
+		int maxDistanceY = a.getHeight() / 2 + b.getHeight() / 2;
+		// Calculates distance.
+		int distanceX = Math.abs(centerAX - centerBX);
+		int distanceY = Math.abs(centerAY - centerBY);
+
+		return distanceX < maxDistanceX + 30 && distanceY < maxDistanceY + 30;
 	}
 
 	/**

@@ -27,19 +27,19 @@ public class EnemyShipFormation implements Iterable<EnemyShip> {
 	/** Initial position in the y-axis. */
 	private static final int INIT_POS_Y = 100;
 	/** Distance between ships. */
-	private static final int SEPARATION_DISTANCE = 40;
+	private static final int SEPARATION_DISTANCE = 60;
 	/** Proportion of C-type ships. */
 	private static final double PROPORTION_C = 0.2;
 	/** Proportion of B-type ships. */
 	private static final double PROPORTION_B = 0.4;
 	/** Lateral speed of the formation. */
-	private static final int X_SPEED = 8;
+	private static final int X_SPEED = 10;
 	/** Downwards speed of the formation. */
-	private static final int Y_SPEED = 4;
+	private static final int Y_SPEED = 6;
 	/** Speed of the bullets shot by the members. */
-	private static final int BULLET_SPEED = 4;
+	private static final int BULLET_SPEED = 6;
 	/** Proportion of differences between shooting times. */
-	private static final double SHOOTING_VARIANCE = .2;
+	private static final double SHOOTING_VARIANCE = 6;
 	/** Margin on the sides of the screen. */
 	private static final int SIDE_MARGIN = 20;
 	/** Margin on the bottom of the screen. */
@@ -109,7 +109,7 @@ public class EnemyShipFormation implements Iterable<EnemyShip> {
 	 * Constructor, sets the initial conditions.
 	 * 
 	 * @param gameSettings
-	 *            Current game settings.
+	 *                     Current game settings.
 	 */
 	public EnemyShipFormation(final GameSettings gameSettings) {
 		this.drawManager = Core.getDrawManager();
@@ -146,10 +146,12 @@ public class EnemyShipFormation implements Iterable<EnemyShip> {
 				else
 					spriteType = SpriteType.EnemyShipA1;
 
-				column.add(new EnemyShip((SEPARATION_DISTANCE 
+				column.add(new EnemyShip((SEPARATION_DISTANCE
 						* this.enemyShips.indexOf(column))
-								+ positionX, (SEPARATION_DISTANCE * i)
-								+ positionY, spriteType));
+						+ positionX,
+						(SEPARATION_DISTANCE * i)
+								+ positionY,
+						spriteType));
 				this.shipCount++;
 			}
 		}
@@ -170,7 +172,7 @@ public class EnemyShipFormation implements Iterable<EnemyShip> {
 	 * Associates the formation to a given screen.
 	 * 
 	 * @param newScreen
-	 *            Screen to attach.
+	 *                  Screen to attach.
 	 */
 	public final void attach(final Screen newScreen) {
 		screen = newScreen;
@@ -190,12 +192,12 @@ public class EnemyShipFormation implements Iterable<EnemyShip> {
 	 * Updates the position of the ships.
 	 */
 	public final void update() {
-		if(this.shootingCooldown == null) {
+		if (this.shootingCooldown == null) {
 			this.shootingCooldown = Core.getVariableCooldown(shootingInterval,
 					shootingVariance);
 			this.shootingCooldown.reset();
 		}
-		
+
 		cleanUp();
 
 		int movementX = 0;
@@ -205,7 +207,7 @@ public class EnemyShipFormation implements Iterable<EnemyShip> {
 		this.movementSpeed = (int) (Math.pow(remainingProportion, 2)
 				* this.baseSpeed);
 		this.movementSpeed += MINIMUM_SPEED;
-		
+
 		movementInterval++;
 		if (movementInterval >= this.movementSpeed) {
 			movementInterval = 0;
@@ -308,7 +310,7 @@ public class EnemyShipFormation implements Iterable<EnemyShip> {
 
 		int leftMostPoint = 0;
 		int rightMostPoint = 0;
-		
+
 		for (List<EnemyShip> column : this.enemyShips) {
 			if (!column.isEmpty()) {
 				if (leftMostPoint == 0)
@@ -328,7 +330,7 @@ public class EnemyShipFormation implements Iterable<EnemyShip> {
 	 * Shoots a bullet downwards.
 	 * 
 	 * @param bullets
-	 *            Bullets set to add the bullet being shot.
+	 *                Bullets set to add the bullet being shot.
 	 */
 	public final void shoot(final Set<Bullet> bullets) {
 		// For now, only ships in the bottom row are able to shoot.
@@ -342,16 +344,13 @@ public class EnemyShipFormation implements Iterable<EnemyShip> {
 					+ shooter.width / 2, shooter.getPositionY(), BULLET_SPEED));
 		}
 
-
-
-
 	}
 
 	/**
 	 * Destroys a ship.
 	 * 
 	 * @param destroyedShip
-	 *            Ship to be destroyed.
+	 *                      Ship to be destroyed.
 	 */
 	public final void destroy(final EnemyShip destroyedShip) {
 		for (List<EnemyShip> column : this.enemyShips)
@@ -392,7 +391,7 @@ public class EnemyShipFormation implements Iterable<EnemyShip> {
 	 * Gets the ship on a given column that will be in charge of shooting.
 	 * 
 	 * @param column
-	 *            Column to search.
+	 *               Column to search.
 	 * @return New shooter ship.
 	 */
 	public final EnemyShip getNextShooter(final List<EnemyShip> column) {

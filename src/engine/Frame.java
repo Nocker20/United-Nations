@@ -1,9 +1,7 @@
 package engine;
 
 import java.awt.Insets;
-
 import javax.swing.JFrame;
-
 import screen.Screen;
 
 /**
@@ -41,6 +39,7 @@ public class Frame extends JFrame {
 		setTitle("Invaders");
 
 		addKeyListener(Core.getInputManager());
+
 	}
 
 	/**

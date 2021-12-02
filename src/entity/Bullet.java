@@ -3,6 +3,7 @@ package entity;
 import java.awt.Color;
 
 import engine.DrawManager.SpriteType;
+import resources.SoundEffectPlayer;
 
 /**
  * Implements a bullet that moves vertically up or down.
@@ -39,8 +40,10 @@ public class Bullet extends Entity {
 	public final void setSprite() {
 		if (speed < 0)
 			this.spriteType = SpriteType.Bullet;
-		else
+		else {
+			SoundEffectPlayer.sound("src\\resources\\laser1.wav");
 			this.spriteType = SpriteType.EnemyBullet;
+		}
 	}
 
 	/**
