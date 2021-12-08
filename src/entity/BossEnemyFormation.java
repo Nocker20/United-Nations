@@ -23,14 +23,19 @@ public class BossEnemyFormation extends Entity {
     private DrawManager drawManager;
     private int movecooldown = 60;
     private int randomX;
-    private  int randomY;
+    private int randomY;
+    private Cooldown shootingCooldown;
+    private int  width;
+    private int height;
 
 
     public BossEnemyFormation(final int positionX, final int positionY, final int width, final int height, final int speed,EnemyShip E) {
         super(positionX, positionY, width, height, Color.green);
         this.speed = speed;
         this.BossShip = E;
-
+        this.shootingCooldown = Core.getCooldown(200);
+        this.width = width;
+        this.height = height;
 
         setSpecialSprite();
 
@@ -80,5 +85,20 @@ public class BossEnemyFormation extends Entity {
 
 
 
+    }
+
+    public final boolean shoot(final Set<BossBullet> bullets,int BossPositionX,int BoosPositionY) {
+        if (this.shootingCooldown.checkFinished()) {
+            this.shootingCooldown.reset();
+            bullets.add(BossBulletPool.getBullet(BossPositionX , BoosPositionY + this.height, 4,"left"));
+            bullets.add(BossBulletPool.getBullet(BossPositionX + this.width / 2, BoosPositionY + this.height, 4,"mid"));
+            bullets.add(BossBulletPool.getBullet(BossPositionX + this.width , BoosPositionY + this.height, 4,"right"));
+
+            bullets.add(BossBulletPool.getBullet(BossPositionX , BoosPositionY + this.height, -4,"left"));
+            bullets.add(BossBulletPool.getBullet(BossPositionX + this.width / 2, BoosPositionY + this.height, -4,"mid"));
+            bullets.add(BossBulletPool.getBullet(BossPositionX + this.width , BoosPositionY + this.height, -4,"right"));
+            return true;
+        }
+        return false;
     }
 }
