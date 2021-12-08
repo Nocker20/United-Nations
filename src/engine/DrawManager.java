@@ -1,10 +1,6 @@
 package engine;
 
 import java.awt.Graphics;
-
-import javax.swing.ImageIcon;
-// import java.awt.Image;
-// import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -156,15 +152,12 @@ public final class DrawManager extends JFrame {
 	 */
 	public void initDrawing(final Screen screen) {
 		backBuffer = new BufferedImage(screen.getWidth(), screen.getHeight(), BufferedImage.TYPE_INT_RGB);
-		ImageIcon icon = new ImageIcon("src\\resources\\si_logo.eps");
-		Image img1 = icon.getImage();
 
 		graphics = frame.getGraphics();
 		backBufferGraphics = backBuffer.getGraphics();
 
 		backBufferGraphics.setColor(Color.black);
 		backBufferGraphics.fillRect(0, 0, screen.getWidth(), screen.getHeight());
-		backBufferGraphics.drawImage(img1, screen.getWidth(), screen.getHeight(), this);
 
 		fontRegularMetrics = backBufferGraphics.getFontMetrics(fontRegular);
 		fontBigMetrics = backBufferGraphics.getFontMetrics(fontBig);

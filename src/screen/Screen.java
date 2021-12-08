@@ -16,7 +16,7 @@ import engine.InputManager;
  * 
  */
 public class Screen {
-	
+
 	/** Milliseconds until the screen accepts user input. */
 	private static final int INPUT_DELAY = 1000;
 
@@ -47,11 +47,11 @@ public class Screen {
 	 * Constructor, establishes the properties of the screen.
 	 * 
 	 * @param width
-	 *            Screen width.
+	 *               Screen width.
 	 * @param height
-	 *            Screen height.
+	 *               Screen height.
 	 * @param fps
-	 *            Frames per second, frame rate at which the game is run.
+	 *               Frames per second, frame rate at which the game is run.
 	 */
 	public Screen(final int width, final int height, final int fps) {
 		this.width = width;
@@ -83,7 +83,6 @@ public class Screen {
 
 		while (this.isRunning) {
 			long time = System.currentTimeMillis();
-
 			update();
 
 			time = (1000 / this.fps) - (System.currentTimeMillis() - time);

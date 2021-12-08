@@ -4,14 +4,13 @@ import java.awt.Insets;
 import javax.swing.JFrame;
 import screen.Screen;
 
-/**
- * Implements a frame to show screens on.
- * 
- * @author <a href="mailto:RobertoIA1987@gmail.com">Roberto Izquierdo Amo</a>
- * 
- */
+
 public class Frame extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	/** Frame width. */
 	private int width;
 	/** Frame height. */
