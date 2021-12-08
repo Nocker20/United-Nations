@@ -36,6 +36,7 @@ public class BulletPool {
 		Bullet bullet;
 
 		if (!pool.isEmpty()) {
+
 			bullet = pool.iterator().next();
 			pool.remove(bullet);
 			bullet.setPositionX(positionX - bullet.getWidth() / 2);

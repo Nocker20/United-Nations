@@ -1,11 +1,11 @@
 package entity;
 
-
 import java.awt.Color;
 
 import engine.Cooldown;
 import engine.Core;
 import engine.DrawManager.SpriteType;
+import resources.SoundEffectPlayer;
 
 /**
  * Implements a enemy ship, to be destroyed by the player.
@@ -46,21 +46,21 @@ public class EnemyShip extends Entity {
 		this.isDestroyed = false;
 
 		switch (this.spriteType) {
-		case EnemyShipA1:
-		case EnemyShipA2:
-			this.pointValue = A_TYPE_POINTS;
-			break;
-		case EnemyShipB1:
-		case EnemyShipB2:
-			this.pointValue = B_TYPE_POINTS;
-			break;
-		case EnemyShipC1:
-		case EnemyShipC2:
-			this.pointValue = C_TYPE_POINTS;
-			break;
-		default:
-			this.pointValue = 0;
-			break;
+			case EnemyShipA1:
+			case EnemyShipA2:
+				this.pointValue = A_TYPE_POINTS;
+				break;
+			case EnemyShipB1:
+			case EnemyShipB2:
+				this.pointValue = B_TYPE_POINTS;
+				break;
+			case EnemyShipC1:
+			case EnemyShipC2:
+				this.pointValue = C_TYPE_POINTS;
+				break;
+			default:
+				this.pointValue = 0;
+				break;
 		}
 	}
 
@@ -104,26 +104,26 @@ public class EnemyShip extends Entity {
 			this.animationCooldown.reset();
 
 			switch (this.spriteType) {
-			case EnemyShipA1:
-				this.spriteType = SpriteType.EnemyShipA2;
-				break;
-			case EnemyShipA2:
-				this.spriteType = SpriteType.EnemyShipA1;
-				break;
-			case EnemyShipB1:
-				this.spriteType = SpriteType.EnemyShipB2;
-				break;
-			case EnemyShipB2:
-				this.spriteType = SpriteType.EnemyShipB1;
-				break;
-			case EnemyShipC1:
-				this.spriteType = SpriteType.EnemyShipC2;
-				break;
-			case EnemyShipC2:
-				this.spriteType = SpriteType.EnemyShipC1;
-				break;
-			default:
-				break;
+				case EnemyShipA1:
+					this.spriteType = SpriteType.EnemyShipA2;
+					break;
+				case EnemyShipA2:
+					this.spriteType = SpriteType.EnemyShipA1;
+					break;
+				case EnemyShipB1:
+					this.spriteType = SpriteType.EnemyShipB2;
+					break;
+				case EnemyShipB2:
+					this.spriteType = SpriteType.EnemyShipB1;
+					break;
+				case EnemyShipC1:
+					this.spriteType = SpriteType.EnemyShipC2;
+					break;
+				case EnemyShipC2:
+					this.spriteType = SpriteType.EnemyShipC1;
+					break;
+				default:
+					break;
 			}
 		}
 	}
@@ -132,6 +132,8 @@ public class EnemyShip extends Entity {
 	 * Destroys the ship, causing an explosion.
 	 */
 	public final void destroy() {
+		SoundEffectPlayer.sound("src\\resources\\sbullet.wav");
+
 		this.isDestroyed = true;
 		this.spriteType = SpriteType.Explosion;
 	}
