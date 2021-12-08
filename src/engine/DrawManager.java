@@ -1,8 +1,6 @@
 package engine;
 
 import java.awt.Graphics;
-// import java.awt.Image;
-// import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -12,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import screen.GameScreen;
 import screen.Screen;
 import entity.Entity;
 import entity.Ship;
@@ -351,10 +350,14 @@ public final class DrawManager extends JFrame {
 	 */
 	public void drawTitle(final Screen screen) {
 		String titleString = "Invaders";
-		String instructionsString = "select with w+s / arrows, confirm with space";
+		String titleString1 = "Invaders";
+		String instructionsString = "select with w+s  /  space : Missile  /  r : Special Missile";
 
 		backBufferGraphics.setColor(Color.GRAY);
 		drawCenteredRegularString(screen, instructionsString, screen.getHeight() / 2);
+
+		backBufferGraphics.setColor(Color.DARK_GRAY);
+		drawCenteredBigString2(screen, titleString1, 2, screen.getHeight() / 3 - 2);
 
 		backBufferGraphics.setColor(Color.GREEN);
 		drawCenteredBigString(screen, titleString, screen.getHeight() / 3);
@@ -542,6 +545,19 @@ public final class DrawManager extends JFrame {
 	}
 
 	/**
+	 * Draws a centered string on big font.
+	 * 
+	 * @param screen Screen to draw on.
+	 * @param string String to draw.
+	 * @param height Height of the drawing.
+	 */
+	public void drawCenteredBigString2(final Screen screen, final String string, final int weight, final int height) {
+		backBufferGraphics.setFont(fontBig);
+		backBufferGraphics.drawString(string, screen.getWidth() / 2 - fontBigMetrics.stringWidth(string) / 2 + weight,
+				height);
+	}
+
+	/**
 	 * Countdown to game start.
 	 * 
 	 * @param screen    Screen to draw on.
@@ -568,5 +584,8 @@ public final class DrawManager extends JFrame {
 					screen.getHeight() / 2 + fontBigMetrics.getHeight() / 3);
 		else
 			drawCenteredBigString(screen, "GO!", screen.getHeight() / 2 + fontBigMetrics.getHeight() / 3);
+	}
+
+	public void drawPauseScreen(GameScreen gameScreen, boolean isPaused) {
 	}
 }

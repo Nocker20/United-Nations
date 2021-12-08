@@ -6,6 +6,7 @@ import java.awt.*;
 import engine.Cooldown;
 import engine.Core;
 import engine.DrawManager.SpriteType;
+import resources.SoundEffectPlayer;
 
 /**
  * Implements a ship, to be controlled by the player.
@@ -22,11 +23,11 @@ public class Ship extends Entity {
 	/** Time between Special shots. */
 	private static final int SSHOOTING_INTERVAL = 10000;
 	/** Speed of the Special bullets shot by the ship. */
-	private static final int SBULLET_SPEED = -8;
+	private static final int SBULLET_SPEED = -4;
 	/** Movement of the ship for each unit of time. */
 	private static final int SPEED = 2;
 
-	private static int SpeedUp;
+	private int SpeedUp;
 
 	/** Minimum time between shots. */
 	private Cooldown shootingCooldown;
@@ -55,14 +56,14 @@ public class Ship extends Entity {
 	 * reached.
 	 */
 	public final void moveRight() {
-		this.positionX = this.positionX +SPEED + SpeedUp;
+		this.positionX = this.positionX + SPEED + SpeedUp;
 	}
 
 	/**
 	 * Moves the ship speed units left, or until the left screen border is reached.
 	 */
 	public final void moveLeft() {
-		this.positionX = this.positionX -SPEED - SpeedUp;
+		this.positionX = this.positionX - SPEED - SpeedUp;
 	}
 
 	/**
@@ -73,6 +74,7 @@ public class Ship extends Entity {
 	 */
 	public final boolean shoot(final Set<Bullet> bullets) {
 		if (this.shootingCooldown.checkFinished()) {
+			SoundEffectPlayer.sound("src\\resources\\laser2.wav");
 			this.shootingCooldown.reset();
 			bullets.add(BulletPool.getBullet(positionX + this.width / 2, positionY, BULLET_SPEED));
 			return true;
@@ -82,8 +84,9 @@ public class Ship extends Entity {
 
 	public final boolean sshoot(final Set<SBullet> sbullets) {
 		if (this.SshootingCooldown.checkFinished()) {
+			SoundEffectPlayer.sound("src\\resources\\nc_detec.wav");
 			this.SshootingCooldown.reset();
-			sbullets.add(SBulletPool.getSBullet(positionX + this.width / 2, positionY, SBULLET_SPEED));
+			sbullets.add(SBulletPool.getSBullet(positionX + this.width / 2, positionY + 20, SBULLET_SPEED));
 			return true;
 		}
 		return false;
@@ -105,6 +108,7 @@ public class Ship extends Entity {
 	 * @throws InterruptedException
 	 */
 	public final void destroy() {
+		SoundEffectPlayer.sound("src\\resources\\explosion.wav");
 		this.destructionCooldown.reset();
 	}
 
@@ -130,18 +134,20 @@ public class Ship extends Entity {
 		this.SpeedUp = 5;
 
 	}
+
 	public final void resetSpeed() {
 		this.SpeedUp = 0;
 
 	}
 
-	//functions , set the shootingcooldown
-	public final void setShootingCooldown(){
+	// functions , set the shootingcooldown
+	public final void setShootingCooldown() {
 
 		this.shootingCooldown = Core.getCooldown(100);
 
 	}
-	public final void resetShootingCooldown(){
+
+	public final void resetShootingCooldown() {
 
 		this.shootingCooldown = Core.getCooldown(750);
 
