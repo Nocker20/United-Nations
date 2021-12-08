@@ -73,6 +73,10 @@ public class GameScreen extends Screen {
 	private boolean bonusLife;
 	// item Types
 	private Color items;
+		/** Checks if game is paused. */
+	private boolean isPaused;
+	/** check if esc is pressed. for pauce function 2020088895*/
+	private boolean escapePressed;
 
 	//boss Enemy
 	private EnemyShip BossEnemy;
@@ -145,70 +149,77 @@ public class GameScreen extends Screen {
 	 * Updates the elements on screen and checks for events.
 	 */
 	protected final void update() {
+		if(inputManager.isKeyDown(KeyEvent.VK_ESCAPE) && !escapePressed){
+			escapePressed = true;
+			if(this.isPaused == true){
+				this.isPaused = false;
+			}
+			else{
+				this.isPaused = true;
+			}
+		}
+		else if(!inputManager.isKeyDown(KeyEvent.VK_ESCAPE) && escapePressed){
+			escapePressed = false;
+		}
 		super.update();
 
-		if (this.inputDelay.checkFinished() && !this.levelFinished) {
+		if(!this.isPaused){
+			if (this.inputDelay.checkFinished() && !this.levelFinished) {
 
-			if (!this.ship.isDestroyed()) {
-				boolean moveRight = inputManager.isKeyDown(KeyEvent.VK_RIGHT) || inputManager.isKeyDown(KeyEvent.VK_D);
-				boolean moveLeft = inputManager.isKeyDown(KeyEvent.VK_LEFT) || inputManager.isKeyDown(KeyEvent.VK_A);
+				if (!this.ship.isDestroyed()) {
+					boolean moveRight = inputManager.isKeyDown(KeyEvent.VK_RIGHT) || inputManager.isKeyDown(KeyEvent.VK_D);
+					boolean moveLeft = inputManager.isKeyDown(KeyEvent.VK_LEFT) || inputManager.isKeyDown(KeyEvent.VK_A);
 
-				boolean isRightBorder = this.ship.getPositionX() + this.ship.getWidth()
-						+ this.ship.getSpeed() > this.width - 1;
-				boolean isLeftBorder = this.ship.getPositionX() - this.ship.getSpeed() < 1;
+					boolean isRightBorder = this.ship.getPositionX() + this.ship.getWidth()
+							+ this.ship.getSpeed() > this.width - 1;
+					boolean isLeftBorder = this.ship.getPositionX() - this.ship.getSpeed() < 1;
 
-				if (moveRight && !isRightBorder) {
-					this.ship.moveRight();
-				}
-				if (moveLeft && !isLeftBorder) {
-					this.ship.moveLeft();
-				}
+					if (moveRight && !isRightBorder) {
+						this.ship.moveRight();
+					}
+					if (moveLeft && !isLeftBorder) {
+						this.ship.moveLeft();
+					}
 
-				if ((inputManager.isKeyDown(KeyEvent.VK_SPACE)) || (inputManager.isKeyDown(KeyEvent.VK_R))) {
-					if (inputManager.isKeyDown(KeyEvent.VK_SPACE)) {
-						if (this.ship.shoot(this.bullets))
-							this.bulletsShot++;
-					} else {
-						if (this.ship.sshoot(this.sbullets))
-							this.SbulletsShot++;
+					if ((inputManager.isKeyDown(KeyEvent.VK_SPACE)) || (inputManager.isKeyDown(KeyEvent.VK_R))) {
+						if (inputManager.isKeyDown(KeyEvent.VK_SPACE)) {
+							if (this.ship.shoot(this.bullets))
+								this.bulletsShot++;
+						} else {
+							if (this.ship.sshoot(this.sbullets))
+								this.SbulletsShot++;
+						}
 					}
 				}
-			}
 
-			if (this.enemyShipSpecial != null) {
-				if (!this.enemyShipSpecial.isDestroyed())
-					this.enemyShipSpecial.move(2, 0);
-				else if (this.enemyShipSpecialExplosionCooldown.checkFinished())
-					this.enemyShipSpecial = null;
+				if (this.enemyShipSpecial != null) {
+					if (!this.enemyShipSpecial.isDestroyed())
+						this.enemyShipSpecial.move(2, 0);
+					else if (this.enemyShipSpecialExplosionCooldown.checkFinished())
+						this.enemyShipSpecial = null;
 
-			}
-
-			if (this.enemyShipSpecial == null
-					&& this.enemyShipSpecialCooldown.checkFinished()) {
-
-				//sp ship's color and effects
-				Random r = new Random();
-				int n = r.nextInt(3);
-				if(n == 0) {
-					this.enemyShipSpecial = new EnemyShip(Color.blue);
-					items = Color.blue;
-				}else if(n == 1){
-					this.enemyShipSpecial = new EnemyShip(Color.red);
-					items = Color.red;
-				}else{
-					this.enemyShipSpecial = new EnemyShip(Color.yellow);
-					items = Color.yellow;
 				}
-				this.enemyShipSpecialCooldown.setCooldown(1);
-				this.enemyShipSpecialCooldown.reset();
+
+				if (this.enemyShipSpecial == null
+						&& this.enemyShipSpecialCooldown.checkFinished()) {
+
+					//sp ship's color and effects
+					Random r = new Random();
+					int n = r.nextInt(3);
+					if(n == 0) {
+						this.enemyShipSpecial = new EnemyShip(Color.blue);
+						items = Color.blue;
+					}else if(n == 1){
+						this.enemyShipSpecial = new EnemyShip(Color.red);
+						items = Color.red;
+					}else{
+						this.enemyShipSpecial = new EnemyShip(Color.yellow);
+						items = Color.yellow;
+					}
+					this.enemyShipSpecialCooldown.setCooldown(1);
+					this.enemyShipSpecialCooldown.reset();
 
 
-				this.logger.info("A special ship appears");
-			}
-			if (this.enemyShipSpecial != null && this.enemyShipSpecial.getPositionX() > this.width) {
-				this.enemyShipSpecial = null;
-				this.logger.info("The special ship has escaped");
-			}
 
 			this.ship.update();
 			//boos formation  up
@@ -269,12 +280,11 @@ public class GameScreen extends Screen {
 			}
 		}
 
+			if (this.levelFinished && this.screenFinishedCooldown.checkFinished())
+				this.isRunning = false;
 
-
-
-		if (this.levelFinished && this.screenFinishedCooldown.checkFinished())
-			this.isRunning = false;
-
+		}
+		draw();
 	}
 
 	/**
@@ -325,6 +335,8 @@ public class GameScreen extends Screen {
 			drawManager.drawHorizontalLine(this, this.height / 2 - this.height / 12);
 			drawManager.drawHorizontalLine(this, this.height / 2 + this.height / 12);
 		}
+		
+		drawManager.drawPauseScreen(this, isPaused);
 
 		drawManager.completeDrawing(this);
 	}

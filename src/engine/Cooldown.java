@@ -57,8 +57,6 @@ public class Cooldown {
 		this.milliseconds = time;
 	}
 
-
-
 	/**
 	 * Restarts the cooldown.
 	 */
