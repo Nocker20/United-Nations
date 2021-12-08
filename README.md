@@ -27,5 +27,14 @@ If the Java path is not set correctly, you can also navigate to the directory fr
 ### System Requirements
 Requires Java 7 or better.
 
+<<<<<<< HEAD
 ### Resources
 [Space Invaders Regular (font)](http://www.fonts2u.com/space-invaders-regular.font) - &copy; kylemaoin 2010
+=======
+###Resources
+[Space Invaders Regular (font)](http://www.fonts2u.com/space-invaders-regular.font) - &copy; kylemaoin 2010
+
+--------------------
+
+There is demo test.
+>>>>>>> aee55520b5cd68504dc1566aaaf346ed7e2879e1
