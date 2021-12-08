@@ -25,7 +25,7 @@ public final class  Core {
 	/** Width of current screen. */
 	private static final int WIDTH = 640;
 	/** Height of current screen. */
-	private static final int HEIGHT = 1136;
+	private static final int HEIGHT = 1000;
 	/** Max fps of current screen. */
 
 	/* 게임 속도를 올리는것이 좋을듯 */
@@ -225,5 +225,15 @@ public final class  Core {
 	 */
 	public static Cooldown getVariableCooldown(final int milliseconds, final int variance) {
 		return new Cooldown(milliseconds, variance);
+	}
+
+
+	//getx,gety functions
+	public static int getWidth() {
+		return WIDTH;
+	}
+
+	public static int getHight() {
+		return HEIGHT;
 	}
 }
