@@ -17,6 +17,8 @@ public class Bullet extends Entity {
 	 * is down.
 	 */
 	private int speed;
+	private String formation;
+
 
 	/**
 	 * Constructor, establishes the bullet's properties.
@@ -47,7 +49,16 @@ public class Bullet extends Entity {
 	 * Updates the bullet's position.
 	 */
 	public final void update() {
-		this.positionY += this.speed;
+
+		if(this.formation == "Bossright"){
+			this.positionY += this.speed;
+			this.positionX += this.speed / 2;
+		}else if(this.formation == "Bossleft"){
+			this.positionY += this.speed;
+			this.positionX -= this.speed / 2;
+		} else{
+			this.positionY += this.speed;
+		}
 	}
 
 	/**
@@ -66,5 +77,10 @@ public class Bullet extends Entity {
 	 */
 	public final int getSpeed() {
 		return this.speed;
+	}
+
+	public final void setformations(String formation){
+		this.formation = formation;
+
 	}
 }

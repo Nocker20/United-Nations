@@ -11,7 +11,9 @@ import java.util.Set;
  */
 public class BulletPool {
 
-	/** Set of already created bullets. */
+	/**
+	 * Set of already created bullets.
+	 */
 	private static Set<Bullet> pool = new HashSet<Bullet>();
 
 	/**
@@ -23,7 +25,7 @@ public class BulletPool {
 
 	/**
 	 * Returns a bullet from the pool if one is available, a new one if there isn't.
-	 * 
+	 *
 	 * @param positionX Requested position of the bullet in the X axis.
 	 * @param positionY Requested position of the bullet in the Y axis.
 	 * @param speed     Requested speed of the bullet, positive or negative
@@ -41,18 +43,20 @@ public class BulletPool {
 			bullet.setSpeed(speed);
 			bullet.setSprite();
 		} else {
-			bullet = new Bullet(positionX, positionY, 6, 8, speed);
-			bullet.setPositionX(positionX - bullet.getWidth() / 2);
+				bullet = new Bullet(positionX, positionY, 6, 8, speed);
+				bullet.setPositionX(positionX - bullet.getWidth() / 2);
 		}
 		return bullet;
+
 	}
 
-	/**
-	 * Adds one or more bullets to the list of available ones.
-	 * 
-	 * @param bullet Bullets to recycle.
-	 */
-	public static void recycle(final Set<Bullet> bullet) {
-		pool.addAll(bullet);
+		/**
+		 * Adds one or more bullets to the list of available ones.
+		 *
+		 * @param bullet Bullets to recycle.
+		 */
+		public static void recycle ( final Set<Bullet> bullet){
+			pool.addAll(bullet);
+		}
 	}
-}
+
