@@ -585,7 +585,21 @@ public final class DrawManager extends JFrame {
 		else
 			drawCenteredBigString(screen, "GO!", screen.getHeight() / 2 + fontBigMetrics.getHeight() / 3);
 	}
+	
+	/**
+	 * Draws basic content of game over screen.
+	 *
+	 * @param screen
+	 *            Screen to draw on.
+	 * @param gamePaused
+	 *            If the game is paused.
+	 */
+	public void drawPauseScreen(final Screen screen, boolean gamePaused) {
+		String gamePausedString = "PAUSE";
 
-	public void drawPauseScreen(GameScreen gameScreen, boolean isPaused) {
+		backBufferGraphics.setColor(Color.GREEN);
+		if(gamePaused)
+		drawCenteredBigString(screen, gamePausedString, screen.getHeight()
+				/ 2 - fontBigMetrics.getHeight() * 2);
 	}
 }
