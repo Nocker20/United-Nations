@@ -203,7 +203,7 @@ public class GameScreen extends Screen {
 				if (this.enemyShipSpecial == null
 						&& this.enemyShipSpecialCooldown.checkFinished()) {
 
-					// sp ship's color and effects
+					//sp ship's color and effects
 					Random r = new Random();
 					int n = r.nextInt(3);
 					if (n == 0) {
@@ -219,27 +219,34 @@ public class GameScreen extends Screen {
 					this.enemyShipSpecialCooldown.setCooldown(1);
 					this.enemyShipSpecialCooldown.reset();
 
-			this.ship.update();
-			//boos formation  up
-			if(BossEnemy == null) {
-				this.enemyShipFormation.update();
 
-				this.enemyShipFormation.shoot(this.bullets);
-			}else{
-				this.BossEnemyFormation.update();
+					this.logger.info("A special ship appears");
+				}
+				if (this.enemyShipSpecial != null && this.enemyShipSpecial.getPositionX() > this.width) {
+					this.enemyShipSpecial = null;
+					this.logger.info("The special ship has escaped");
+				}
+				this.ship.update();
+				//boos formation  up
+				if (BossEnemy == null) {
+					this.enemyShipFormation.update();
 
-				this.BossEnemyFormation.shoot(this.Bossbullets,BossEnemy.getPositionX(),BossEnemy.getPositionY());
+					this.enemyShipFormation.shoot(this.bullets);
+				} else {
+					this.BossEnemyFormation.update();
+
+					this.BossEnemyFormation.shoot(this.Bossbullets, BossEnemy.getPositionX(), BossEnemy.getPositionY());
+				}
 			}
-		}
 
-		manageCollisions();
-		smanageCollisions();
-		BossmanageCollisions();
+			manageCollisions();
+			smanageCollisions();
+			BossmanageCollisions();
 
-		cleanBossBullets();
-		cleanBullets();
-		cleanSBullets();
-		draw();
+			cleanBossBullets();
+			cleanBullets();
+			cleanSBullets();
+			draw();
 
 		/*og level up
 		if ((this.enemyShipFormation.isEmpty() || this.lives == 0) && !this.levelFinished) {
@@ -253,30 +260,30 @@ public class GameScreen extends Screen {
 		}
 		*/
 
-		//boss apears function
-		if (this.lives == 0 && !this.levelFinished) {
-			this.levelFinished = true;
+			//boss apears function
+			if (this.lives == 0 && !this.levelFinished) {
+				this.levelFinished = true;
 
-			//reset the functions
-			this.ship.resetShootingCooldown();
-			this.ship.resetSpeed();
+				//reset the functions
+				this.ship.resetShootingCooldown();
+				this.ship.resetSpeed();
 
-			this.screenFinishedCooldown.reset();
-		}
-
-		if ((this.enemyShipFormation.isEmpty()) && !this.levelFinished) {
-
-			if (this.BossEnemy == null) {
-				
-
-				cleanBullets();
-				this.BossEnemy= new EnemyShip(250,500, DrawManager.SpriteType.EnemyShipSpecial);
-				this.BossEnemyFormation = new BossEnemyFormation(this.BossEnemy.getPositionX(),this.BossEnemy.getPositionY(),32,32,10,this.BossEnemy);
-
-
-				this.logger.info("Boss ship appears");
+				this.screenFinishedCooldown.reset();
 			}
-		}
+
+			if ((this.enemyShipFormation.isEmpty()) && !this.levelFinished) {
+
+				if (this.BossEnemy == null) {
+
+
+					cleanBullets();
+					this.BossEnemy = new EnemyShip(250, 500, DrawManager.SpriteType.EnemyShipSpecial);
+					this.BossEnemyFormation = new BossEnemyFormation(this.BossEnemy.getPositionX(), this.BossEnemy.getPositionY(), 32, 32, 10, this.BossEnemy);
+
+
+					this.logger.info("Boss ship appears");
+				}
+			}
 
 			if (this.levelFinished && this.screenFinishedCooldown.checkFinished())
 				this.isRunning = false;
