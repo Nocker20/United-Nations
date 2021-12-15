@@ -17,7 +17,7 @@ import resources.SoundEffectPlayer;
 public class Ship extends Entity {
 
 	/** Time between shots. */
-	private static final int SHOOTING_INTERVAL = 150;
+	private static final int SHOOTING_INTERVAL = 500;
 	/** Speed of the bullets shot by the ship. */
 	private static final int BULLET_SPEED = -6;
 	/** Time between Special shots. */
@@ -130,26 +130,29 @@ public class Ship extends Entity {
 		return SPEED;
 	}
 
-	public final void setSpeed() {
-		this.SpeedUp = 5;
+	public final void setSpeed(int SpeedLevel) {
+		this.SpeedUp = SpeedLevel;
 
 	}
 
-	public final void resetSpeed() {
-		this.SpeedUp = 0;
+	public final void resetSpeed(int SpeedLevel) {
+		this.SpeedUp = SpeedLevel;
 
 	}
 
 	// functions , set the shootingcooldown
-	public final void setShootingCooldown() {
+	public final void setShootingCooldown(int ShootLevel) {
 
-		this.shootingCooldown = Core.getCooldown(100);
+		this.shootingCooldown.setCooldown(500 - ShootLevel * 100);
 
 	}
 
-	public final void resetShootingCooldown() {
+	public final void resetShootingCooldown(int ShootLevel) {
 
-		this.shootingCooldown = Core.getCooldown(750);
+		this.shootingCooldown.setCooldown(500 - ShootLevel * 100);
 
+	}
+	public  final  Cooldown getDestructionCooldown(){
+		return this.destructionCooldown;
 	}
 }

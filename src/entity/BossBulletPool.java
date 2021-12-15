@@ -15,6 +15,7 @@ public class BossBulletPool {
      * Set of already created bullets.
      */
     private static Set<BossBullet> pool = new HashSet<BossBullet>();
+    private static int circle = 0;
 
 
     /**
@@ -37,10 +38,12 @@ public class BossBulletPool {
             bullet.setPositionY(positionY - 22);
             bullet.setSpeed(speed);
             bullet.setSprite();
+            circle++;
         } else {
-            bullet = new BossBullet(positionX, positionY, 6, 8, speed);
+            bullet = new BossBullet(positionX, positionY, 6, 8, speed,circle);
             bullet.setformations(Type);
             bullet.setPositionX(positionX - bullet.getWidth() / 2);
+            circle++;
         }
         return bullet;
 

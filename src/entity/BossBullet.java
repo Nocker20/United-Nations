@@ -1,6 +1,7 @@
 package entity;
 
 import java.awt.Color;
+import java.util.Random;
 
 import engine.DrawManager.SpriteType;
 
@@ -18,7 +19,7 @@ public class BossBullet extends Entity {
      */
     private int speed;
     private String formation;
-
+    private int circle;
 
     /**
      * Constructor, establishes the bullet's properties.
@@ -28,10 +29,11 @@ public class BossBullet extends Entity {
      * @param speed     Speed of the bullet, positive or negative depending on
      *                  direction - positive is down.
      */
-    public BossBullet(final int positionX, final int positionY, final int width, final int height, final int speed) {
+    public BossBullet(final int positionX, final int positionY, final int width, final int height, final int speed,int circle) {
         super(positionX, positionY, width, height, Color.red);
 
         this.speed = speed;
+        this.circle=circle;
         setSprite();
     }
 
@@ -69,9 +71,17 @@ public class BossBullet extends Entity {
         }else if(this.formation == "left"){
             this.positionY += this.speed;
             this.positionX -= this.speed / 2;
-        } else{
+        } else if(this.formation == "mid"){
             this.positionY += this.speed;
+        } else if(this.formation == "random"){
+            Random r = new Random();
+            int n = r.nextInt(4) - 2;
+            this.positionY += 4;
+            this.positionX += this.speed;
+
         }
+
+
     }
 
     /**
