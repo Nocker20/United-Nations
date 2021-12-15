@@ -16,6 +16,7 @@ public class Cooldown {
 	private int duration;
 	/** Beginning time. */
 	private long time;
+	private int timeClock;
 
 	/**
 	 * Constructor, established the time until the action can be performed again.
@@ -53,8 +54,8 @@ public class Cooldown {
 		return false;
 	}
 	//setcooldown functions
-	public void setCooldown(int  time){
-		this.milliseconds = time;
+	public void setCooldown(int time){
+		this.duration = time;
 	}
 
 	/**
@@ -65,5 +66,9 @@ public class Cooldown {
 		if (this.variance != 0)
 			this.duration = (this.milliseconds - this.variance)
 					+ (int) (Math.random() * (this.milliseconds + this.variance));
+	}
+	public final int returntime(){
+
+		return duration;
 	}
 }

@@ -23,6 +23,8 @@ public class EnemyShip extends Entity {
 	private static final int C_TYPE_POINTS = 30;
 	/** Point value of a bonus enemy. */
 	private static final int BONUS_TYPE_POINTS = 100;
+	private int EnemyLife;
+	private  Boolean invincible = false;
 
 	/** Cooldown between sprite changes. */
 	private Cooldown animationCooldown;
@@ -94,6 +96,7 @@ public class EnemyShip extends Entity {
 	public final void move(final int distanceX, final int distanceY) {
 		this.positionX += distanceX;
 		this.positionY += distanceY;
+
 	}
 
 	/**
@@ -145,5 +148,21 @@ public class EnemyShip extends Entity {
 	 */
 	public final boolean isDestroyed() {
 		return this.isDestroyed;
+	}
+	public final void setBossLive(int level){
+		this.EnemyLife = 5 + 5* level;
+	}
+
+	public void hitBoss(){
+		SoundEffectPlayer.sound("src\\resources\\big_gun.wav");
+		if(!this.invincible)this.EnemyLife--;
+	}
+
+	public void setEnemyInvincible(Boolean Switch){
+		this.invincible = Switch;
+	}
+
+	public int getEnemyLife(){
+		return this.EnemyLife;
 	}
 }

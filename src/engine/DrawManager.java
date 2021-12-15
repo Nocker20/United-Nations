@@ -1,16 +1,17 @@
 package engine;
 
 import java.awt.Graphics;
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import screen.GameScreen;
 import screen.Screen;
 import entity.Entity;
 import entity.Ship;
@@ -50,6 +51,15 @@ public final class DrawManager extends JFrame {
 	/** Sprite types mapped to their images. */
 	public Map<SpriteType, boolean[][]> spriteMap;
 
+	public static BufferedImage DashImg;
+	public static BufferedImage backgroundImg;
+	public static BufferedImage BossImg;
+	public static BufferedImage ShootLevelImg;
+	public static BufferedImage SpeedLevelImg;
+	public static BufferedImage PlayerImg;
+	public static Graphics backBufferGraphics1;
+
+
 	/** Sprite types. */
 	public enum SpriteType {
 		/** Player ship. */
@@ -77,7 +87,8 @@ public final class DrawManager extends JFrame {
 		/** Bonus ship. */
 		EnemyShipSpecial,
 		/** Destroyed enemy ship. */
-		Explosion
+		Explosion,
+		Hp
 	};
 
 	/**
@@ -88,9 +99,37 @@ public final class DrawManager extends JFrame {
 		logger = Core.getLogger();
 		logger.info("Started loading resources.");
 
+		String imgPath = "src\\resources\\dash.png";
+		String imgPath1 = "src\\resources\\background.jpg";
+		String imgPath2 = "src\\resources\\boss.png";
+		String imgpath3 = "src\\resources\\SpeedLevel.png";
+		String imgpath4 = "src\\resources\\ShootLevel.png";
+		String imgpath5 = "src\\resources\\player.png";
+		File file = new File(imgPath);
+		File file1 = new File(imgPath1);
+		File file2 = new File(imgPath2);
+		File file3 = new File(imgpath3);
+		File file4 = new File(imgpath4);
+		File file5 = new File(imgpath5);
+
 		try {
+			this.DashImg = ImageIO.read(file);
+			this.backgroundImg = ImageIO.read(file1);
+			this.BossImg = ImageIO.read(file2);
+			this.SpeedLevelImg = ImageIO.read(file3);
+			this.ShootLevelImg = ImageIO.read(file4);
+			this.PlayerImg = ImageIO.read(file5);
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		try {
+
+
 			spriteMap = new LinkedHashMap<SpriteType, boolean[][]>();
 
+			spriteMap.put(SpriteType.Hp, new boolean[0][0]);
 			spriteMap.put(SpriteType.Ship, new boolean[13][8]);
 			spriteMap.put(SpriteType.ShipDestroyed, new boolean[13][8]);
 			spriteMap.put(SpriteType.Bullet, new boolean[3][5]);
@@ -150,18 +189,27 @@ public final class DrawManager extends JFrame {
 	 * 
 	 * @param screen Screen to draw in.
 	 */
+
 	public void initDrawing(final Screen screen) {
+
+
+
+
+
+
+
 		backBuffer = new BufferedImage(screen.getWidth(), screen.getHeight(), BufferedImage.TYPE_INT_RGB);
 
 		graphics = frame.getGraphics();
 		backBufferGraphics = backBuffer.getGraphics();
 
+
 		backBufferGraphics.setColor(Color.black);
 		backBufferGraphics.fillRect(0, 0, screen.getWidth(), screen.getHeight());
-
 		fontRegularMetrics = backBufferGraphics.getFontMetrics(fontRegular);
 		fontBigMetrics = backBufferGraphics.getFontMetrics(fontBig);
 
+		backBufferGraphics.drawImage(backgroundImg, 0, 0, 640,1000,null);
 		// drawBorders(screen);
 		// drawGrid(screen);
 	}
@@ -183,6 +231,7 @@ public final class DrawManager extends JFrame {
 	 * @param positionY Coordinates for the upper side of the image.
 	 */
 	public void drawEntity(final Entity entity, final int positionX, final int positionY) {
+
 		boolean[][] image = spriteMap.get(entity.getSpriteType());
 		// System.out.println(entity.getSpriteType());
 		// System.out.println(SpriteType.Ship);
@@ -263,6 +312,9 @@ public final class DrawManager extends JFrame {
 					if (image[i][j]) {
 						backBufferGraphics.drawRect(positionX + i * 2, positionY + j * 2, 1, 1);
 					}
+		}else if(entity.getSpriteType() == SpriteType.Hp) {
+			backBufferGraphics.fillRect(positionX + 50, positionY - 40, 1, 10);
+
 		} else {
 			backBufferGraphics.setColor(entity.getColor());
 			for (int i = 0; i < image.length; i++)
@@ -323,12 +375,14 @@ public final class DrawManager extends JFrame {
 	 * @param lives  Current lives.
 	 */
 	public void drawLives(final Screen screen, final int lives) {
+
 		backBufferGraphics.setFont(fontRegular);
 		backBufferGraphics.setColor(Color.WHITE);
 		backBufferGraphics.drawString(Integer.toString(lives), 20, 25);
 		Ship dummyShip = new Ship(0, 0);
 		for (int i = 0; i < lives; i++)
-			drawEntity(dummyShip, 40 + 35 * i, 30);
+			//drawEntity(dummyShip, 40 + 35 * i, 30);
+			drawPlayer(screen, 40 + 35 *i, 10);
 	}
 
 	/**
@@ -595,11 +649,106 @@ public final class DrawManager extends JFrame {
 	 *            If the game is paused.
 	 */
 	public void drawPauseScreen(final Screen screen, boolean gamePaused) {
+
 		String gamePausedString = "PAUSE";
 
 		backBufferGraphics.setColor(Color.GREEN);
 		if(gamePaused)
 		drawCenteredBigString(screen, gamePausedString, screen.getHeight()
 				/ 2 - fontBigMetrics.getHeight() * 2);
+	}
+
+	public void drawBossMessage(final Screen screen, Cooldown time) {
+
+		String gamePausedString ="";
+		if(time.returntime() <= 6000){
+			gamePausedString = "Boss Battle!";
+		}else if(time.returntime() <= 4000 && time.returntime() > 3000){
+			gamePausedString = "3";
+		}else if(time.returntime() <= 3000 && time.returntime() > 2000){
+			gamePausedString = "2";
+		}else if(time.returntime() <= 2000 && time.returntime() > 1000){
+			gamePausedString = "1";
+		}else if(time.returntime() <= 1000){
+			gamePausedString = "Boss Appear!";
+		}
+
+
+		backBufferGraphics.setColor(Color.GREEN);
+		if(!time.checkFinished())
+			drawCenteredBigString(screen, gamePausedString, screen.getHeight()
+					/ 2 - fontBigMetrics.getHeight() * 2);
+	}
+
+	public void drawdash(final Screen screen, final Boolean dash) {
+		backBufferGraphics.setFont(fontRegular);
+		backBufferGraphics.setColor(Color.WHITE);
+		backBufferGraphics.drawString("Dash:", 20, 950);
+		/*Ship dummyShip = new Ship(0, 0);
+		if (dash) {
+			drawEntity(dummyShip, 75, 950);
+		}*/
+		if (dash) {
+		backBufferGraphics.drawImage(DashImg, 75, 930, null);
+		}
+
+	}
+	public void drawSpeedLevel(final Screen screen, final int SpeedLevel) {
+		backBufferGraphics.setFont(fontRegular);
+		backBufferGraphics.setColor(Color.WHITE);
+		backBufferGraphics.drawString("SpeedLevel:", 150, 950);
+		Ship dummyShip = new Ship(0, 0);
+		for (int i = 0; i < SpeedLevel; i++)
+			backBufferGraphics.drawImage(SpeedLevelImg, 270 + 35 * i, 930,null);
+	}
+
+	public void drawShootlevel(final Screen screen, final int Shootlevel) {
+		backBufferGraphics.setFont(fontRegular);
+		backBufferGraphics.setColor(Color.WHITE);
+		backBufferGraphics.drawString("Shootlevel:", 400, 950);
+
+		for (int i = 0; i < Shootlevel; i++)
+			backBufferGraphics.drawImage(ShootLevelImg, 520 + 35 * i, 930,null);
+	}
+
+	public void drawBossEnemy(final Screen screen, final int X,final int Y) {
+		backBufferGraphics.setFont(fontRegular);
+		backBufferGraphics.setColor(Color.WHITE);
+		backBufferGraphics.drawImage(BossImg, X, Y, null);
+	}
+
+	public void drawhp(final Screen screen,int X,int Y,int level,int BossLive){
+		backBufferGraphics.setFont(fontRegular);
+		backBufferGraphics.setColor(Color.green);
+		backBufferGraphics.fillRect(X - (6 * (5 + 5*level) - 32)/2 , Y+40, 6 * ( 5 + 5*level), 5);
+		backBufferGraphics.setColor(Color.red);
+		backBufferGraphics.fillRect(X - (6 * (5+ 5*level) - 32) /2, Y+40, BossLive * 6, 5);
+	}
+
+	public void drawPlayer(final Screen screen,int X,int Y){
+		backBufferGraphics.setFont(fontRegular);
+		backBufferGraphics.setColor(Color.WHITE);
+		backBufferGraphics.drawImage(PlayerImg, X, Y, null);
+	}
+
+	public void drawBossBattleModeChange(final Screen screen) {
+
+		String gamePausedString = "Boss Mode Change!";
+		backBufferGraphics.setColor(Color.green);
+
+			drawCenteredBigString(screen, gamePausedString, screen.getHeight()
+					/ 2 - fontBigMetrics.getHeight() * 2);
+	}
+
+	public void paintHero(Graphics g) {
+		g.drawImage(DashImg, 100, 100, null);
+	}
+	public void drawLevelEnd(final Screen screen) {
+		int rectWidth = screen.getWidth();
+		int rectHeight = screen.getHeight() / 6;
+		backBufferGraphics.setColor(Color.BLACK);
+		backBufferGraphics.fillRect(0, screen.getHeight() / 2 - rectHeight / 2, rectWidth, rectHeight);
+		backBufferGraphics.setColor(Color.GREEN);
+		drawCenteredBigString(screen, "Congratulations!", screen.getHeight() / 2 + fontBigMetrics.getHeight() / 3);
 	}
 }

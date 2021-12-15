@@ -107,7 +107,7 @@ public final class Core {
 		gameSettings.add(SETTINGS_LEVEL_7);
 
 		GameState gameState;
-		SoundEffectPlayer.sound("src\\resources\\background.wav");
+		SoundEffectPlayer.backgroundsound("src\\resources\\background.wav");
 
 		int returnCode = 1;
 		do {

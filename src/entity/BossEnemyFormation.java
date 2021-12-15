@@ -25,27 +25,41 @@ public class BossEnemyFormation extends Entity {
     private int randomX;
     private int randomY;
     private Cooldown shootingCooldown;
+    private Cooldown UiCoolDawn;
     private int  width;
     private int height;
+    private Boolean BossModeChange =true;
+    private Screen screen;
+    private boolean abc;
 
 
-    public BossEnemyFormation(final int positionX, final int positionY, final int width, final int height, final int speed,EnemyShip E) {
+    public BossEnemyFormation(final int positionX, final int positionY, final int width, final int height, final int speed,EnemyShip E,int level,Screen screen) {
         super(positionX, positionY, width, height, Color.green);
         this.speed = speed;
         this.BossShip = E;
-        this.shootingCooldown = Core.getCooldown(200);
+        this.shootingCooldown = Core.getCooldown(1000);
+        this.shootingCooldown.setCooldown(800 - level *50);
+        this.shootingCooldown.reset();
+        this.UiCoolDawn = Core.getCooldown(1000);
+        this.UiCoolDawn.setCooldown(4000);
+        this.UiCoolDawn.reset();
         this.width = width;
         this.height = height;
+        this.level = level;
+
 
         setSpecialSprite();
 
 
     }
 
-    public final void draw() {
+    public final void draw(Screen Screen) {
                 this.drawManager = Core.getDrawManager();
-                drawManager.drawEntity(BossShip, BossShip.getPositionX(),
+                drawManager.drawBossEnemy(Screen, BossShip.getPositionX(),
                         BossShip.getPositionY());
+                        if(abc) {
+                            drawManager.drawBossBattleModeChange(Screen);
+                        }
     }
 
     public final void setSpecialSprite() {
@@ -87,18 +101,50 @@ public class BossEnemyFormation extends Entity {
 
     }
 
-    public final boolean shoot(final Set<BossBullet> bullets,int BossPositionX,int BoosPositionY) {
-        if (this.shootingCooldown.checkFinished()) {
+    public final boolean shoot(final Set<BossBullet> bullets,int life,int BossPositionX,int BoosPositionY) {
+        if(this.shootingCooldown.checkFinished() && life > (5 + level * 5)/2){
+            Random r = new Random();
+            int n = r.nextInt(3) - 3;
+            int b = 3 - r.nextInt(3) ;
             this.shootingCooldown.reset();
-            bullets.add(BossBulletPool.getBullet(BossPositionX , BoosPositionY + this.height, 4,"left"));
-            bullets.add(BossBulletPool.getBullet(BossPositionX + this.width / 2, BoosPositionY + this.height, 4,"mid"));
-            bullets.add(BossBulletPool.getBullet(BossPositionX + this.width , BoosPositionY + this.height, 4,"right"));
+            bullets.add(BossBulletPool.getBullet(BossPositionX + this.width / 2, BoosPositionY + this.height, n,"random"));
+            bullets.add(BossBulletPool.getBullet(BossPositionX + this.width / 2, BoosPositionY + this.height, b,"random"));
 
-            bullets.add(BossBulletPool.getBullet(BossPositionX , BoosPositionY + this.height, -4,"left"));
-            bullets.add(BossBulletPool.getBullet(BossPositionX + this.width / 2, BoosPositionY + this.height, -4,"mid"));
-            bullets.add(BossBulletPool.getBullet(BossPositionX + this.width , BoosPositionY + this.height, -4,"right"));
-            return true;
+
+            if(life == (5 + level * 5)/ 2 + 1){
+                this.UiCoolDawn.reset();
+            }
+
+        } else if(this.shootingCooldown.checkFinished() && life <= (5 + level * 5)/2 && this.BossModeChange){
+            drawBattleChangeUi();
+
+
+        } else if (this.shootingCooldown.checkFinished() && life <= (5 + level * 5)/2) {
+
+                this.shootingCooldown.reset();
+                bullets.add(BossBulletPool.getBullet(BossPositionX, BoosPositionY + this.height, 3, "left"));
+                bullets.add(BossBulletPool.getBullet(BossPositionX + this.width / 2, BoosPositionY + this.height, 3, "mid"));
+                bullets.add(BossBulletPool.getBullet(BossPositionX + this.width, BoosPositionY + this.height, 3, "right"));
+
+                bullets.add(BossBulletPool.getBullet(BossPositionX, BoosPositionY + this.height, -3, "left"));
+                bullets.add(BossBulletPool.getBullet(BossPositionX + this.width / 2, BoosPositionY + this.height, -3, "mid"));
+                bullets.add(BossBulletPool.getBullet(BossPositionX + this.width, BoosPositionY + this.height, -3, "right"));
+                return true;
+
         }
         return false;
+    }
+
+    public void drawBattleChangeUi(){
+
+        if(!this.UiCoolDawn.checkFinished()){
+            abc = true;
+            this.BossShip.setEnemyInvincible(true);
+        }else {
+            this.BossModeChange = false;
+            this.abc= false;
+            this.BossShip.setEnemyInvincible(false);
+        }
+
     }
 }
